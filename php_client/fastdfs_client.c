@@ -94,7 +94,7 @@ const zend_fcall_info empty_fcall_info = { 0, NULL, NULL, NULL, NULL, 0, NULL, N
 	    ZVAL_LONG(sock_zval, -1); \
 	\
 	    zend_hash_update_wrapper(php_hash, "sock", sizeof("sock"), \
-			    &sock_zval, sizeof(zval *), NULL); \
+			    sock_zval, sizeof(zval *), NULL); \
 	}
 
 // Every user visible function must have an entry in fastdfs_client_functions[].
@@ -182,7 +182,7 @@ zend_module_entry fastdfs_client_module_entry = {
 	NULL,//PHP_RINIT(fastdfs_client),
 	NULL,//PHP_RSHUTDOWN(fastdfs_client),
 	PHP_MINFO(fastdfs_client),
-	"1.00", 
+	"1.00",
 	STANDARD_MODULE_PROPERTIES
 };
 
@@ -318,7 +318,7 @@ static void php_fdfs_tracker_get_connection_impl(INTERNAL_FUNCTION_PARAMETERS, \
 	if (argc != 0)
 	{
 		logError("file: "__FILE__", line: %d, " \
-			"tracker_get_connection parameters count: %d != 0", 
+			"tracker_get_connection parameters count: %d != 0",
 			__LINE__, argc);
 		pContext->err_no = EINVAL;
 		RETURN_BOOL(false);
@@ -333,7 +333,7 @@ static void php_fdfs_tracker_get_connection_impl(INTERNAL_FUNCTION_PARAMETERS, \
 
 	pContext->err_no = 0;
 	array_init(return_value);
-	
+
 	zend_add_assoc_stringl_ex(return_value, "ip_addr", sizeof("ip_addr"), \
 		pTrackerServer->ip_addr, strlen(pTrackerServer->ip_addr), 1);
 	zend_add_assoc_long_ex(return_value, "port", sizeof("port"), \
@@ -710,7 +710,7 @@ static void php_fdfs_tracker_list_groups_impl(INTERNAL_FUNCTION_PARAMETERS, \
 	if (argc > 2)
 	{
 		logError("file: "__FILE__", line: %d, " \
-			"tracker_list_groups parameters count: %d > 2", 
+			"tracker_list_groups parameters count: %d > 2",
 			__LINE__, argc);
 		pContext->err_no = EINVAL;
 		RETURN_BOOL(false);
@@ -823,7 +823,7 @@ static void php_fdfs_tracker_list_groups_impl(INTERNAL_FUNCTION_PARAMETERS, \
 		zend_add_assoc_long_ex(group_info_array, "current_trunk_file_id", \
 			sizeof("current_trunk_file_id"), \
 			pGroupStat->current_trunk_file_id);
-		       
+
 		result = tracker_list_servers(pTrackerServer, \
 				pGroupStat->group_name, NULL, \
 				storage_infos, FDFS_MAX_SERVERS_EACH_GROUP, \
@@ -1488,7 +1488,7 @@ static void php_fdfs_tracker_do_query_storage_impl( \
 }
 
 static void php_fdfs_tracker_delete_storage_impl( \
-		INTERNAL_FUNCTION_PARAMETERS, 
+		INTERNAL_FUNCTION_PARAMETERS,
 		FDFSPhpContext *pContext)
 {
 	int argc;
@@ -1539,7 +1539,7 @@ static void php_fdfs_tracker_delete_storage_impl( \
 }
 
 static void php_fdfs_storage_delete_file_impl( \
-		INTERNAL_FUNCTION_PARAMETERS, 
+		INTERNAL_FUNCTION_PARAMETERS,
 		FDFSPhpContext *pContext, const bool bFileId)
 {
 	int argc;
@@ -1698,7 +1698,7 @@ static void php_fdfs_storage_delete_file_impl( \
 }
 
 static void php_fdfs_storage_truncate_file_impl( \
-		INTERNAL_FUNCTION_PARAMETERS, 
+		INTERNAL_FUNCTION_PARAMETERS,
 		FDFSPhpContext *pContext, const bool bFileId)
 {
 	int argc;
@@ -2888,7 +2888,7 @@ static int php_fdfs_upload_callback(void *arg, const int64_t file_size, int sock
 	args[1] = pUploadCallback->callback.args;
 
 	if (zend_call_user_function_wrapper(EG(function_table), NULL, \
-		pUploadCallback->callback.func_name, 
+		pUploadCallback->callback.func_name,
 		&ret, 2, args TSRMLS_CC) == FAILURE)
 	{
 		logError("file: "__FILE__", line: %d, " \
@@ -2958,7 +2958,7 @@ static int php_fdfs_download_callback(void *arg, const int64_t file_size, \
 	args[1] = &zfilesize;
 	args[2] = &zdata;
 	if (zend_call_user_function_wrapper(EG(function_table), NULL, \
-		pCallback->func_name, 
+		pCallback->func_name,
 		&ret, 3, args TSRMLS_CC) == FAILURE)
 	{
 		logError("file: "__FILE__", line: %d, " \
@@ -2992,7 +2992,7 @@ static int php_fdfs_download_callback(void *arg, const int64_t file_size, \
 
 /*
 string/array fastdfs_storage_upload_by_filename(string local_filename
-	[, string file_ext_name, array meta_list, string group_name, 
+	[, string file_ext_name, array meta_list, string group_name,
 	array tracker_server, array storage_server])
 return string/array for success, false for error
 */
@@ -3392,7 +3392,7 @@ static void php_fdfs_storage_upload_slave_file_impl( \
 	{
 		if (upload_type == FDFS_UPLOAD_BY_CALLBACK)
 		{
-		 result = zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, 
+		 result = zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 				"asss|zaaa", &callback_obj, \
 				&group_name, &group_name_len, \
 				&master_filename, &master_filename_len, \
@@ -3401,7 +3401,7 @@ static void php_fdfs_storage_upload_slave_file_impl( \
 		}
 		else
 		{
-		 result = zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, 
+		 result = zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 				"ssss|zaaa", &local_filename, &filename_len, \
 				&group_name, &group_name_len, \
 				&master_filename, &master_filename_len, \
@@ -3587,8 +3587,8 @@ static void php_fdfs_storage_upload_slave_file_impl( \
 }
 
 /*
-boolean fastdfs_storage_append_by_filename(string local_filename, 
-	string group_name, appender_filename, 
+boolean fastdfs_storage_append_by_filename(string local_filename,
+	string group_name, appender_filename,
 	[array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -3815,8 +3815,8 @@ static void php_fdfs_storage_append_file_impl( \
 }
 
 /*
-boolean fastdfs_storage_modify_by_filename(string local_filename, 
-	long file_offset, string group_name, appender_filename, 
+boolean fastdfs_storage_modify_by_filename(string local_filename,
+	long file_offset, string group_name, appender_filename,
 	[array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -4624,7 +4624,7 @@ ZEND_FUNCTION(fastdfs_tracker_list_groups)
 }
 
 /*
-array fastdfs_tracker_query_storage_store([string group_name, 
+array fastdfs_tracker_query_storage_store([string group_name,
 		array tracker_server])
 return array for success, false for error
 */
@@ -4635,7 +4635,7 @@ ZEND_FUNCTION(fastdfs_tracker_query_storage_store)
 }
 
 /*
-array fastdfs_tracker_query_storage_store_list([string group_name, 
+array fastdfs_tracker_query_storage_store_list([string group_name,
 		array tracker_server])
 return array for success, false for error
 */
@@ -4646,7 +4646,7 @@ ZEND_FUNCTION(fastdfs_tracker_query_storage_store_list)
 }
 
 /*
-array fastdfs_tracker_query_storage_update(string group_name, 
+array fastdfs_tracker_query_storage_update(string group_name,
 		string remote_filename [, array tracker_server])
 return array for success, false for error
 */
@@ -4658,7 +4658,7 @@ ZEND_FUNCTION(fastdfs_tracker_query_storage_update)
 }
 
 /*
-array fastdfs_tracker_query_storage_fetch(string group_name, 
+array fastdfs_tracker_query_storage_fetch(string group_name,
 		string remote_filename [, array tracker_server])
 return array for success, false for error
 */
@@ -4670,7 +4670,7 @@ ZEND_FUNCTION(fastdfs_tracker_query_storage_fetch)
 }
 
 /*
-array fastdfs_tracker_query_storage_list(string group_name, 
+array fastdfs_tracker_query_storage_list(string group_name,
 		string remote_filename [, array tracker_server])
 return array for success, false for error
 */
@@ -4682,7 +4682,7 @@ ZEND_FUNCTION(fastdfs_tracker_query_storage_list)
 }
 
 /*
-array fastdfs_tracker_query_storage_update1(string file_id, 
+array fastdfs_tracker_query_storage_update1(string file_id,
 		[, array tracker_server])
 return array for success, false for error
 */
@@ -4694,7 +4694,7 @@ ZEND_FUNCTION(fastdfs_tracker_query_storage_update1)
 }
 
 /*
-array fastdfs_tracker_query_storage_fetch1(string file_id 
+array fastdfs_tracker_query_storage_fetch1(string file_id
 		[, array tracker_server])
 return array for success, false for error
 */
@@ -4729,8 +4729,8 @@ ZEND_FUNCTION(fastdfs_tracker_delete_storage)
 }
 
 /*
-array fastdfs_storage_upload_by_filename(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+array fastdfs_storage_upload_by_filename(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -4742,8 +4742,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_by_filename)
 }
 
 /*
-string fastdfs_storage_upload_by_filename1(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+string fastdfs_storage_upload_by_filename1(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -4755,8 +4755,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_by_filename1)
 }
 
 /*
-array fastdfs_storage_upload_by_filebuff(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+array fastdfs_storage_upload_by_filebuff(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -4768,8 +4768,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_by_filebuff)
 }
 
 /*
-string fastdfs_storage_upload_by_filebuff1(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+string fastdfs_storage_upload_by_filebuff1(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -4781,8 +4781,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_by_filebuff1)
 }
 
 /*
-array fastdfs_storage_upload_by_callback(array callback_array, 
-	[string file_ext_name, string meta_list, string group_name, 
+array fastdfs_storage_upload_by_callback(array callback_array,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -4794,8 +4794,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_by_callback)
 }
 
 /*
-string fastdfs_storage_upload_by_callback1(array callback_array, 
-	[string file_ext_name, string meta_list, string group_name, 
+string fastdfs_storage_upload_by_callback1(array callback_array,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -4807,7 +4807,7 @@ ZEND_FUNCTION(fastdfs_storage_upload_by_callback1)
 }
 
 /*
-boolean fastdfs_storage_append_by_filename(string local_filename, 
+boolean fastdfs_storage_append_by_filename(string local_filename,
 	string group_name, appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4819,7 +4819,7 @@ ZEND_FUNCTION(fastdfs_storage_append_by_filename)
 }
 
 /*
-boolean fastdfs_storage_append_by_filename1(string local_filename, 
+boolean fastdfs_storage_append_by_filename1(string local_filename,
 	string appender_file_id
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4831,7 +4831,7 @@ ZEND_FUNCTION(fastdfs_storage_append_by_filename1)
 }
 
 /*
-boolean fastdfs_storage_append_by_filebuff(string file_buff, 
+boolean fastdfs_storage_append_by_filebuff(string file_buff,
 	string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4843,7 +4843,7 @@ ZEND_FUNCTION(fastdfs_storage_append_by_filebuff)
 }
 
 /*
-boolean fastdfs_storage_append_by_filebuff1(string file_buff, 
+boolean fastdfs_storage_append_by_filebuff1(string file_buff,
 	string appender_file_id
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4855,7 +4855,7 @@ ZEND_FUNCTION(fastdfs_storage_append_by_filebuff1)
 }
 
 /*
-boolean fastdfs_storage_append_by_callback(array callback_array, 
+boolean fastdfs_storage_append_by_callback(array callback_array,
 	string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4867,7 +4867,7 @@ ZEND_FUNCTION(fastdfs_storage_append_by_callback)
 }
 
 /*
-boolean fastdfs_storage_append_by_callback1(array callback_array, 
+boolean fastdfs_storage_append_by_callback1(array callback_array,
 	string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4879,7 +4879,7 @@ ZEND_FUNCTION(fastdfs_storage_append_by_callback1)
 }
 
 /*
-boolean fastdfs_storage_modify_by_filename(string local_filename, 
+boolean fastdfs_storage_modify_by_filename(string local_filename,
 	long file_offset, string group_name, appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4891,7 +4891,7 @@ ZEND_FUNCTION(fastdfs_storage_modify_by_filename)
 }
 
 /*
-boolean fastdfs_storage_modify_by_filename1(string local_filename, 
+boolean fastdfs_storage_modify_by_filename1(string local_filename,
 	long file_offset, string appender_file_id
         [, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4903,7 +4903,7 @@ ZEND_FUNCTION(fastdfs_storage_modify_by_filename1)
 }
 
 /*
-boolean fastdfs_storage_modify_by_filebuff(string file_buff, 
+boolean fastdfs_storage_modify_by_filebuff(string file_buff,
 	long file_offset, string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4915,7 +4915,7 @@ ZEND_FUNCTION(fastdfs_storage_modify_by_filebuff)
 }
 
 /*
-boolean fastdfs_storage_modify_by_filebuff1(string file_buff, 
+boolean fastdfs_storage_modify_by_filebuff1(string file_buff,
 	long file_offset, string appender_file_id
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4927,7 +4927,7 @@ ZEND_FUNCTION(fastdfs_storage_modify_by_filebuff1)
 }
 
 /*
-boolean fastdfs_storage_modify_by_callback(array callback_array, 
+boolean fastdfs_storage_modify_by_callback(array callback_array,
 	long file_offset, string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4939,7 +4939,7 @@ ZEND_FUNCTION(fastdfs_storage_modify_by_callback)
 }
 
 /*
-boolean fastdfs_storage_modify_by_callback1(array callback_array, 
+boolean fastdfs_storage_modify_by_callback1(array callback_array,
 	long file_offset, string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -4951,8 +4951,8 @@ ZEND_FUNCTION(fastdfs_storage_modify_by_callback1)
 }
 
 /*
-array fastdfs_storage_upload_appender_by_filename(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+array fastdfs_storage_upload_appender_by_filename(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -4964,8 +4964,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_appender_by_filename)
 }
 
 /*
-string fastdfs_storage_upload_appender_by_filename1(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+string fastdfs_storage_upload_appender_by_filename1(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -4977,8 +4977,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_appender_by_filename1)
 }
 
 /*
-array fastdfs_storage_upload_appender_by_filebuff(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+array fastdfs_storage_upload_appender_by_filebuff(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -4990,8 +4990,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_appender_by_filebuff)
 }
 
 /*
-string fastdfs_storage_upload_appender_by_filebuff1(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+string fastdfs_storage_upload_appender_by_filebuff1(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -5003,8 +5003,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_appender_by_filebuff1)
 }
 
 /*
-array fastdfs_storage_upload_appender_by_callback(array callback_array, 
-	[string file_ext_name, string meta_list, string group_name, 
+array fastdfs_storage_upload_appender_by_callback(array callback_array,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -5016,8 +5016,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_appender_by_callback)
 }
 
 /*
-string fastdfs_storage_upload_appender_by_callback1(array callback_array, 
-	[string file_ext_name, string meta_list, string group_name, 
+string fastdfs_storage_upload_appender_by_callback1(array callback_array,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -5029,9 +5029,9 @@ ZEND_FUNCTION(fastdfs_storage_upload_appender_by_callback1)
 }
 
 /*
-string/array fastdfs_storage_upload_slave_by_filename(string local_filename, 
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, array meta_list, 
+string/array fastdfs_storage_upload_slave_by_filename(string local_filename,
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, array meta_list,
 	array tracker_server, array storage_server])
 return string/array for success, false for error
 */
@@ -5043,8 +5043,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_slave_by_filename)
 }
 
 /*
-string fastdfs_storage_upload_slave_by_filename1(string local_filename, 
-	string master_file_id, string prefix_name [, string file_ext_name, 
+string fastdfs_storage_upload_slave_by_filename1(string local_filename,
+	string master_file_id, string prefix_name [, string file_ext_name,
 	string meta_list, array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -5056,9 +5056,9 @@ ZEND_FUNCTION(fastdfs_storage_upload_slave_by_filename1)
 }
 
 /*
-array fastdfs_storage_upload_slave_by_filebuff(string file_buff, 
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, array meta_list, 
+array fastdfs_storage_upload_slave_by_filebuff(string file_buff,
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, array meta_list,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -5070,8 +5070,8 @@ ZEND_FUNCTION(fastdfs_storage_upload_slave_by_filebuff)
 }
 
 /*
-string fastdfs_storage_upload_slave_by_filebuff1(string file_buff, 
-	string master_file_id, string prefix_name [, string file_ext_name, 
+string fastdfs_storage_upload_slave_by_filebuff1(string file_buff,
+	string master_file_id, string prefix_name [, string file_ext_name,
 	string meta_list, array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -5083,9 +5083,9 @@ ZEND_FUNCTION(fastdfs_storage_upload_slave_by_filebuff1)
 }
 
 /*
-array fastdfs_storage_upload_slave_by_callback(array callback_array, 
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, array meta_list, 
+array fastdfs_storage_upload_slave_by_callback(array callback_array,
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, array meta_list,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -5097,9 +5097,9 @@ ZEND_FUNCTION(fastdfs_storage_upload_slave_by_callback)
 }
 
 /*
-string fastdfs_storage_upload_slave_by_callback1(array callback_array, 
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, array meta_list, 
+string fastdfs_storage_upload_slave_by_callback1(array callback_array,
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, array meta_list,
 	array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -5111,7 +5111,7 @@ ZEND_FUNCTION(fastdfs_storage_upload_slave_by_callback1)
 }
 
 /*
-boolean fastdfs_storage_delete_file(string group_name, string remote_filename 
+boolean fastdfs_storage_delete_file(string group_name, string remote_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -5133,8 +5133,8 @@ ZEND_FUNCTION(fastdfs_storage_delete_file1)
 }
 
 /*
-boolean fastdfs_storage_truncate_file(string group_name, 
-	string appender_filename [, long truncated_file_size = 0, 
+boolean fastdfs_storage_truncate_file(string group_name,
+	string appender_filename [, long truncated_file_size = 0,
 	array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -5146,7 +5146,7 @@ ZEND_FUNCTION(fastdfs_storage_truncate_file)
 
 /*
 boolean fastdfs_storage_truncate_file1(string appender_file_id
-	[, long truncated_file_size = 0, array tracker_server, 
+	[, long truncated_file_size = 0, array tracker_server,
 	array storage_server])
 return true for success, false for error
 */
@@ -5157,7 +5157,7 @@ ZEND_FUNCTION(fastdfs_storage_truncate_file1)
 }
 
 /*
-string fastdfs_storage_download_file_to_buff(string group_name, 
+string fastdfs_storage_download_file_to_buff(string group_name,
 	string remote_filename [, long file_offset, long download_bytes,
 	array tracker_server, array storage_server])
 return file content for success, false for error
@@ -5182,7 +5182,7 @@ ZEND_FUNCTION(fastdfs_storage_download_file_to_buff1)
 
 /*
 boolean fastdfs_storage_download_file_to_callback(string group_name,
-	string remote_filename, array download_callback [, long file_offset, 
+	string remote_filename, array download_callback [, long file_offset,
 	long download_bytes, array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -5205,8 +5205,8 @@ ZEND_FUNCTION(fastdfs_storage_download_file_to_callback1)
 }
 
 /*
-boolean fastdfs_storage_download_file_to_file(string group_name, 
-	string remote_filename, string local_filename [, long file_offset, 
+boolean fastdfs_storage_download_file_to_file(string group_name,
+	string remote_filename, string local_filename [, long file_offset,
 	long download_bytes, array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -5217,8 +5217,8 @@ ZEND_FUNCTION(fastdfs_storage_download_file_to_file)
 }
 
 /*
-boolean fastdfs_storage_download_file_to_file1(string file_id, 
-	string local_filename [, long file_offset, long download_bytes, 
+boolean fastdfs_storage_download_file_to_file1(string file_id,
+	string local_filename [, long file_offset, long download_bytes,
 	array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -5230,7 +5230,7 @@ ZEND_FUNCTION(fastdfs_storage_download_file_to_file1)
 
 /*
 boolean fastdfs_storage_set_metadata(string group_name, string remote_filename,
-	array meta_list [, string op_type, array tracker_server, 
+	array meta_list [, string op_type, array tracker_server,
 	array storage_server])
 return true for success, false for error
 */
@@ -5528,7 +5528,7 @@ PHP_METHOD(FastDFS, tracker_list_groups)
 }
 
 /*
-array FastDFS::tracker_query_storage_store([string group_name, 
+array FastDFS::tracker_query_storage_store([string group_name,
 		array tracker_server])
 return array for success, false for error
 */
@@ -5544,7 +5544,7 @@ PHP_METHOD(FastDFS, tracker_query_storage_store)
 }
 
 /*
-array FastDFS::tracker_query_storage_store_list([string group_name, 
+array FastDFS::tracker_query_storage_store_list([string group_name,
 		array tracker_server])
 return array for success, false for error
 */
@@ -5560,7 +5560,7 @@ PHP_METHOD(FastDFS, tracker_query_storage_store_list)
 }
 
 /*
-array FastDFS::tracker_query_storage_update(string group_name, 
+array FastDFS::tracker_query_storage_update(string group_name,
 		string remote_filename [, array tracker_server])
 return array for success, false for error
 */
@@ -5576,7 +5576,7 @@ PHP_METHOD(FastDFS, tracker_query_storage_update)
 }
 
 /*
-array FastDFS::tracker_query_storage_fetch(string group_name, 
+array FastDFS::tracker_query_storage_fetch(string group_name,
 		string remote_filename [, array tracker_server])
 return array for success, false for error
 */
@@ -5592,7 +5592,7 @@ PHP_METHOD(FastDFS, tracker_query_storage_fetch)
 }
 
 /*
-array FastDFS::tracker_query_storage_list(string group_name, 
+array FastDFS::tracker_query_storage_list(string group_name,
 		string remote_filename [, array tracker_server])
 return array for success, false for error
 */
@@ -5621,7 +5621,7 @@ PHP_METHOD(FastDFS, tracker_delete_storage)
 }
 
 /*
-array FastDFS::tracker_query_storage_update1(string file_id 
+array FastDFS::tracker_query_storage_update1(string file_id
 		[, array tracker_server])
 return array for success, false for error
 */
@@ -5637,7 +5637,7 @@ PHP_METHOD(FastDFS, tracker_query_storage_update1)
 }
 
 /*
-array FastDFS::tracker_query_storage_fetch1(string file_id 
+array FastDFS::tracker_query_storage_fetch1(string file_id
 		[, array tracker_server])
 return array for success, false for error
 */
@@ -5653,7 +5653,7 @@ PHP_METHOD(FastDFS, tracker_query_storage_fetch1)
 }
 
 /*
-array FastDFS::tracker_query_storage_list1(string file_id 
+array FastDFS::tracker_query_storage_list1(string file_id
 		[, array tracker_server])
 return array for success, false for error
 */
@@ -5668,8 +5668,8 @@ PHP_METHOD(FastDFS, tracker_query_storage_list1)
 }
 
 /*
-array FastDFS::storage_upload_by_filename(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+array FastDFS::storage_upload_by_filename(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -5685,8 +5685,8 @@ PHP_METHOD(FastDFS, storage_upload_by_filename)
 }
 
 /*
-string FastDFS::storage_upload_by_filename1(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+string FastDFS::storage_upload_by_filename1(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -5702,8 +5702,8 @@ PHP_METHOD(FastDFS, storage_upload_by_filename1)
 }
 
 /*
-array FastDFS::storage_upload_by_filebuff(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+array FastDFS::storage_upload_by_filebuff(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -5719,8 +5719,8 @@ PHP_METHOD(FastDFS, storage_upload_by_filebuff)
 }
 
 /*
-string FastDFS::storage_upload_by_filebuff1(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+string FastDFS::storage_upload_by_filebuff1(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -5736,8 +5736,8 @@ PHP_METHOD(FastDFS, storage_upload_by_filebuff1)
 }
 
 /*
-array FastDFS::storage_upload_by_callback(array callback_array, 
-	[string file_ext_name, string meta_list, string group_name, 
+array FastDFS::storage_upload_by_callback(array callback_array,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -5753,8 +5753,8 @@ PHP_METHOD(FastDFS, storage_upload_by_callback)
 }
 
 /*
-string FastDFS::storage_upload_by_callback1(array callback_array, 
-	[string file_ext_name, string meta_list, string group_name, 
+string FastDFS::storage_upload_by_callback1(array callback_array,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -5770,7 +5770,7 @@ PHP_METHOD(FastDFS, storage_upload_by_callback1)
 }
 
 /*
-boolean FastDFS::storage_append_by_filename(string local_filename, 
+boolean FastDFS::storage_append_by_filename(string local_filename,
 	string group_name, appender_filename
 	[, array tracker_server, array storage_server])
 return string/array for success, false for error
@@ -5786,7 +5786,7 @@ PHP_METHOD(FastDFS, storage_append_by_filename)
 }
 
 /*
-string FastDFS::storage_upload_by_filename1(string local_filename, 
+string FastDFS::storage_upload_by_filename1(string local_filename,
 	string appender_file_id
 	[, array tracker_server, array storage_server])
 return file_id for success, false for error
@@ -5802,7 +5802,7 @@ PHP_METHOD(FastDFS, storage_append_by_filename1)
 }
 
 /*
-array FastDFS::storage_append_by_filebuff(string file_buff, 
+array FastDFS::storage_append_by_filebuff(string file_buff,
 	string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return array for success, false for error
@@ -5818,7 +5818,7 @@ PHP_METHOD(FastDFS, storage_append_by_filebuff)
 }
 
 /*
-string FastDFS::storage_append_by_filebuff1(string file_buff, 
+string FastDFS::storage_append_by_filebuff1(string file_buff,
 	string appender_file_id
 	[, array tracker_server, array storage_server])
 return file_id  for success, false for error
@@ -5834,7 +5834,7 @@ PHP_METHOD(FastDFS, storage_append_by_filebuff1)
 }
 
 /*
-array FastDFS::storage_append_by_callback(array callback_array, 
+array FastDFS::storage_append_by_callback(array callback_array,
 	string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return array for success, false for error
@@ -5867,7 +5867,7 @@ PHP_METHOD(FastDFS, storage_append_by_callback1)
 
 
 /*
-boolean FastDFS::storage_modify_by_filename(string local_filename, 
+boolean FastDFS::storage_modify_by_filename(string local_filename,
 	long file_offset, string group_name, appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -5883,7 +5883,7 @@ PHP_METHOD(FastDFS, storage_modify_by_filename)
 }
 
 /*
-boolean FastDFS::storage_modify_by_filename1(string local_filename, 
+boolean FastDFS::storage_modify_by_filename1(string local_filename,
 	long file_offset, string appender_file_id
         [, array tracker_server, array storage_server])
 return true for success, false for error
@@ -5899,7 +5899,7 @@ PHP_METHOD(FastDFS, storage_modify_by_filename1)
 }
 
 /*
-boolean FastDFS::storage_modify_by_filebuff(string file_buff, 
+boolean FastDFS::storage_modify_by_filebuff(string file_buff,
 	long file_offset, string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -5915,7 +5915,7 @@ PHP_METHOD(FastDFS, storage_modify_by_filebuff)
 }
 
 /*
-boolean FastDFS::storage_modify_by_filebuff1(string file_buff, 
+boolean FastDFS::storage_modify_by_filebuff1(string file_buff,
 	long file_offset, string appender_file_id
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -5931,7 +5931,7 @@ PHP_METHOD(FastDFS, storage_modify_by_filebuff1)
 }
 
 /*
-boolean FastDFS::storage_modify_by_callback(array callback_array, 
+boolean FastDFS::storage_modify_by_callback(array callback_array,
 	long file_offset, string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -5947,7 +5947,7 @@ PHP_METHOD(FastDFS, storage_modify_by_callback)
 }
 
 /*
-boolean FastDFS::storage_modify_by_callback1(array callback_array, 
+boolean FastDFS::storage_modify_by_callback1(array callback_array,
 	long file_offset, string group_name, string appender_filename
 	[, array tracker_server, array storage_server])
 return true for success, false for error
@@ -5963,8 +5963,8 @@ PHP_METHOD(FastDFS, storage_modify_by_callback1)
 }
 
 /*
-array FastDFS::storage_upload_appender_by_filename(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+array FastDFS::storage_upload_appender_by_filename(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -5980,8 +5980,8 @@ PHP_METHOD(FastDFS, storage_upload_appender_by_filename)
 }
 
 /*
-string FastDFS::storage_upload_appender_by_filename1(string local_filename, 
-	[string file_ext_name, string meta_list, string group_name, 
+string FastDFS::storage_upload_appender_by_filename1(string local_filename,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -5997,8 +5997,8 @@ PHP_METHOD(FastDFS, storage_upload_appender_by_filename1)
 }
 
 /*
-array FastDFS::storage_upload_appender_by_filebuff(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+array FastDFS::storage_upload_appender_by_filebuff(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -6014,8 +6014,8 @@ PHP_METHOD(FastDFS, storage_upload_appender_by_filebuff)
 }
 
 /*
-string FastDFS::storage_upload_appender_by_filebuff1(string file_buff, 
-	[string file_ext_name, string meta_list, string group_name, 
+string FastDFS::storage_upload_appender_by_filebuff1(string file_buff,
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -6032,7 +6032,7 @@ PHP_METHOD(FastDFS, storage_upload_appender_by_filebuff1)
 
 /*
 array FastDFS::storage_upload_appender_by_callback(array callback_array,
-	[string file_ext_name, string meta_list, string group_name, 
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -6049,7 +6049,7 @@ PHP_METHOD(FastDFS, storage_upload_appender_by_callback)
 
 /*
 string FastDFS::storage_upload_appender_by_callback1(array callback_array,
-	[string file_ext_name, string meta_list, string group_name, 
+	[string file_ext_name, string meta_list, string group_name,
 	array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -6066,9 +6066,9 @@ PHP_METHOD(FastDFS, storage_upload_appender_by_callback1)
 
 
 /*
-array FastDFS::storage_upload_slave_by_filename(string local_filename, 
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, string meta_list, 
+array FastDFS::storage_upload_slave_by_filename(string local_filename,
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, string meta_list,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -6084,9 +6084,9 @@ PHP_METHOD(FastDFS, storage_upload_slave_by_filename)
 }
 
 /*
-string FastDFS::storage_upload_slave_by_filename1(string local_filename, 
-	string master_file_id, string prefix_name 
-	[, string file_ext_name, string meta_list, 
+string FastDFS::storage_upload_slave_by_filename1(string local_filename,
+	string master_file_id, string prefix_name
+	[, string file_ext_name, string meta_list,
 	array tracker_server, array storage_server])
 return file_id for success, false for error
 */
@@ -6102,9 +6102,9 @@ PHP_METHOD(FastDFS, storage_upload_slave_by_filename1)
 }
 
 /*
-array FastDFS::storage_upload_slave_by_filebuff(string file_buff, 
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, string meta_list, 
+array FastDFS::storage_upload_slave_by_filebuff(string file_buff,
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, string meta_list,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -6120,8 +6120,8 @@ PHP_METHOD(FastDFS, storage_upload_slave_by_filebuff)
 }
 
 /*
-string FastDFS::storage_upload_slave_by_filebuff1(string file_buff, 
-	string master_file_id, string prefix_name [, string file_ext_name, 
+string FastDFS::storage_upload_slave_by_filebuff1(string file_buff,
+	string master_file_id, string prefix_name [, string file_ext_name,
 	string meta_list, array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -6138,8 +6138,8 @@ PHP_METHOD(FastDFS, storage_upload_slave_by_filebuff1)
 
 /*
 array FastDFS::storage_upload_slave_by_callback(array callback_array,
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, string meta_list, 
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, string meta_list,
 	array tracker_server, array storage_server])
 return array for success, false for error
 */
@@ -6156,8 +6156,8 @@ PHP_METHOD(FastDFS, storage_upload_slave_by_callback)
 
 /*
 string FastDFS::storage_upload_slave_by_callback1(array callback_array,
-	string group_name, string master_filename, string prefix_name 
-	[, string file_ext_name, string meta_list, 
+	string group_name, string master_filename, string prefix_name
+	[, string file_ext_name, string meta_list,
 	array tracker_server, array storage_server])
 return file_id  for success, false for error
 */
@@ -6203,8 +6203,8 @@ PHP_METHOD(FastDFS, storage_delete_file1)
 }
 
 /*
-boolean FastDFS::storage_truncate_file(string group_name, 
-	string remote_filename [, long truncated_file_size = 0, 
+boolean FastDFS::storage_truncate_file(string group_name,
+	string remote_filename [, long truncated_file_size = 0,
 	array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -6220,7 +6220,7 @@ PHP_METHOD(FastDFS, storage_truncate_file)
 
 /*
 boolean FastDFS::storage_truncate_file1(string file_id
-	[, long truncated_file_size = 0, array tracker_server, 
+	[, long truncated_file_size = 0, array tracker_server,
 	array storage_server])
 return true for success, false for error
 */
@@ -6235,7 +6235,7 @@ PHP_METHOD(FastDFS, storage_truncate_file1)
 }
 
 /*
-string FastDFS::storage_download_file_to_buff(string group_name, 
+string FastDFS::storage_download_file_to_buff(string group_name,
 	string remote_filename [, long file_offset, long download_bytes,
 	array tracker_server, array storage_server])
 return file content for success, false for error
@@ -6268,7 +6268,7 @@ PHP_METHOD(FastDFS, storage_download_file_to_buff1)
 
 /*
 boolean FastDFS::storage_download_file_to_callback(string group_name,
-	string remote_filename, array download_callback [, long file_offset, 
+	string remote_filename, array download_callback [, long file_offset,
 	long download_bytes, array tracker_server, array storage_server])
 return true for success, false for error
 */
@@ -6283,7 +6283,7 @@ PHP_METHOD(FastDFS, storage_download_file_to_callback)
 }
 
 /*
-boolean FastDFS::storage_download_file_to_callback1(string file_id, 
+boolean FastDFS::storage_download_file_to_callback1(string file_id,
 	array download_callback [, long file_offset, long download_bytes,
 	array tracker_server, array storage_server])
 return true for success, false for error
@@ -6299,8 +6299,8 @@ PHP_METHOD(FastDFS, storage_download_file_to_callback1)
 }
 
 /*
-boolean FastDFS::storage_download_file_to_file(string group_name, 
-	string remote_filename, string local_filename 
+boolean FastDFS::storage_download_file_to_file(string group_name,
+	string remote_filename, string local_filename
 	[, long file_offset, long download_bytes,
 	array tracker_server, array storage_server])
 return true for success, false for error
@@ -6333,7 +6333,7 @@ PHP_METHOD(FastDFS, storage_download_file_to_file1)
 
 /*
 boolean FastDFS::storage_set_metadata(string group_name, string remote_filename,
-	array meta_list [, string op_type, array tracker_server, 
+	array meta_list [, string op_type, array tracker_server,
 	array storage_server])
 return true for success, false for error
 */
@@ -6349,7 +6349,7 @@ PHP_METHOD(FastDFS, storage_set_metadata)
 
 /*
 boolean FastDFS::storage_set_metadata1(string file_id,
-	array meta_list [, string op_type, array tracker_server, 
+	array meta_list [, string op_type, array tracker_server,
 	array storage_server])
 return true for success, false for error
 */
@@ -6464,7 +6464,7 @@ PHP_METHOD(FastDFS, http_gen_token)
 	php_fdfs_http_gen_token_impl( \
 		INTERNAL_FUNCTION_PARAM_PASSTHRU, &(i_obj->context));
 }
-                
+
 /*
 array FastDFS::get_file_info(string group_name, string remote_filename)
 return array for success, false for error
@@ -7255,7 +7255,7 @@ static int load_config_files()
 	use_conn_pool = pz++;
 	conn_pool_max_idle_time = pz++;
 
-	if (zend_get_configuration_directive_wrapper(ITEM_NAME_CONF_COUNT, 
+	if (zend_get_configuration_directive_wrapper(ITEM_NAME_CONF_COUNT,
 		sizeof(ITEM_NAME_CONF_COUNT), &conf_c) == SUCCESS)
 	{
 		config_count = atoi(Z_STRVAL_P(conf_c));
@@ -7278,7 +7278,7 @@ static int load_config_files()
 		strcpy(g_fdfs_base_path, "/tmp");
 		fprintf(stderr, "file: "__FILE__", line: %d, " \
 			"fastdht_client.ini does not have item " \
-			"\"%s\", set to %s!", __LINE__, 
+			"\"%s\", set to %s!", __LINE__,
 			ITEM_NAME_BASE_PATH, g_fdfs_base_path);
 	}
 	else
@@ -7416,7 +7416,7 @@ static int load_config_files()
 			}
 		}
 
-		if ((result=fdfs_load_tracker_group(pConfigInfo->pTrackerGroup, 
+		if ((result=fdfs_load_tracker_group(pConfigInfo->pTrackerGroup,
 				Z_STRVAL_P(conf_filename))) != 0)
 		{
 			return result;
@@ -7429,7 +7429,7 @@ static int load_config_files()
 		char *use_conn_pool_str;
 
 		use_conn_pool_str = Z_STRVAL_P(use_conn_pool);
-		if (strcasecmp(use_conn_pool_str, "yes") == 0 || 
+		if (strcasecmp(use_conn_pool_str, "yes") == 0 ||
 			strcasecmp(use_conn_pool_str, "on") == 0 ||
 			strcasecmp(use_conn_pool_str, "true") == 0 ||
 			strcmp(use_conn_pool_str, "1") == 0)
@@ -7586,11 +7586,10 @@ PHP_RSHUTDOWN_FUNCTION(fastdfs_client)
 PHP_MINFO_FUNCTION(fastdfs_client)
 {
 	char fastdfs_info[64];
-	sprintf(fastdfs_info, "fastdfs_client v%d.%02d support", 
+	sprintf(fastdfs_info, "fastdfs_client v%d.%02d support",
 		g_fdfs_version.major, g_fdfs_version.minor);
 
 	php_info_print_table_start();
 	php_info_print_table_header(2, fastdfs_info, "enabled");
 	php_info_print_table_end();
 }
-
